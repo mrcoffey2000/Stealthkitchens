@@ -1,136 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stealth Kitchens</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #0a0a0a;
+      --text: #e8e8e8;
+      --accent: #ff1e56;
+      --steel: #2a2a2a;
+      --darksteel: #1a1a1a;
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      margin: 0;
-      min-height: 100dvh;
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', system-ui, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-
-    /* Logo – always visible, top-center */
-    .logo {
-      position: absolute;
-      top: 5vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: clamp(140px, 28vw, 320px);
-      height: auto;
-      opacity: 0.9;
-      z-index: 10;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 70vh;
+    header {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1556912167-f556f1f39fdf?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=2400') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 10vw;
+      position: relative;
     }
-
-    .slide {
+    .logo {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--accent);
+      text-stroke: 1.5px var(--accent);
+      text-shadow: 0 0 40px rgba(255,30,86,0.4);
+    }
+    .tagline {
+      margin-top: 2rem;
+      font-size: 1.4rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .enter {
       position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 1.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(2.2rem, 9vw, 5.5rem);
-      font-weight: 200;
-      line-height: 1.25;
-      letter-spacing: 0.04em;
-      white-space: pre-line;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      animation: pulse 3s infinite;
     }
+    @keyframes pulse { 0%,100% { opacity:0.4 } 50% { opacity:0.8 } }
 
-    .slide.active { opacity: 1; }
-
-    .cta {
-      margin-top: 4rem;
-      padding: 1rem 3rem;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 9999px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
+    section {
+      padding: 12vh 8vw;
+      max-width: 1400px;
+      margin: 0 auto;
     }
-    .cta:hover { background: #eee; }
-
-    .footer {
-      position: absolute;
-      bottom: 2rem;
-      font-size: 0.85rem;
-      color: #666;
+    h2 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 3rem;
+      color: var(--accent);
     }
-    .footer a {
-      color: #666;
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: all 0.3s;
+    p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 2rem auto;
+      opacity: 0.9;
     }
-    .footer a:hover {
-      color: #fff;
-      border-bottom-color: #fff;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 3rem;
+      margin-top: 6rem;
+    }
+    .card {
+      background: var(--darksteel);
+      padding: 3rem 2rem;
+      border: 1px solid #333;
+      transition: all 0.4s ease;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 30px rgba(255,30,86,0.15);
+    }
+    footer {
+      background: #000;
+      padding: 8vh 8vw;
+      text-align: center;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo on every slide -->
-  <img src="https://i.ibb.co/yBp6vDNL/1764591736338.png" alt="Stealth Kitchens" class="logo">
+  <header>
+    <div>
+      <div class="logo">STEALTH</div>
+      <div class="tagline">Commercial kitchens. By the hour. No bullshit.</div>
+      <div class="enter">knock twice</div>
+    </div>
+  </header>
 
-  <div class="carousel">
-    <div class="slide active">Tired of getting\nfucked by\nghost kitchens?</div>
-    <div class="slide">Introducing\nStealth Kitchens</div>
-    <div class="slide">Book.\nCook.\nDone.</div>
-  </div>
+  <section>
+    <h2>Backdoor access only</h2>
+    <p>You won’t find us on Google Maps. You won’t see a sign out front. We open the door when you book. Stainless steel, hoods that actually work, walk-ins that stay cold, and zero corporate vibes.</p>
+    <p>This is the spot chefs whisper about. The one that’s fully licensed, fully equipped, and still feels like you’re getting away with something.</p>
 
-  <!-- Change href to your real waitlist / form -->
-  <a href="https://tally.so/r/w8R9oK" class="cta" target="_blank">GET EARLY ACCESS</a>
+    <div class="grid">
+      <div class="card">
+        <h3>Book by the hour</h3>
+        <p>Pay only for the time you need. No leases, no deposits, no 3-month minimums.</p>
+      </div>
+      <div class="card">
+        <h3>Pro grade everything</h3>
+        <p>Convection, combis, blast chillers, 20-ft hoods. Shit that actually works when you’re slammed.</p>
+      </div>
+      <div class="card">
+        <h3>Zero red tape</h3>
+        <p>Walk in with your knives and an idea. Walk out with product. We handle the permits.</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="footer">
-    <a href="/privacy.html">Privacy policy – tap to view</a>
-  </div>
+  <footer>
+    STEALTH KITCHENS © 2025 — IF YOU KNOW, YOU KNOW
+  </footer>
 
-  <script>
-    const slides = document.querySelectorAll('.slide');
-    let current = 0;
-
-    function nextSlide() {
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }
-
-    // Auto-rotate every 5 seconds
-    setInterval(nextSlide, 5000);
-
-    // Optional: restart timer on click/tap so it feels intentional
-    document.addEventListener('click', () => {
-      clearInterval(window.stealthInterval);
-      nextSlide();
-      window.stealthInterval = setInterval(nextSlide, 5000);
-    });
-  </script>
 </body>
 </html>
