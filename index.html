@@ -15,6 +15,8 @@
     .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     .slide-in { animation: slideIn 0.6s ease-out; }
     @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .logo-fade { animation: fadeInLogo 1s ease-out; }
+    @keyframes fadeInLogo { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
   </style>
 </head>
 <body class="min-h-screen transition-colors duration-500 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -30,7 +32,8 @@
   <!-- Hero Section -->
   <header class="gradient-bg text-white py-20 px-6 text-center">
     <div class="max-w-4xl mx-auto slide-in">
-      <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to the Future</h1>
+      <!-- New Logo Implementation -->
+      <img src="grok-image-ns68dt.jpg" alt="Awesome App Logo" class="mx-auto w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 logo-fade mb-6">
       <p class="text-xl md:text-2xl opacity-90">Blazing fast • Beautiful • Yours</p>
       <button class="mt-8 px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transform hover:scale-105 transition">
         Get Started Free
@@ -76,59 +79,5 @@
       html.classList.add('dark');
     }
   </script>
-</body>
-</html>
-
-.4s ease;
-    }
-    .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 30px rgba(255,30,86,0.15);
-    }
-    footer {
-      background: #000;
-      padding: 8vh 8vw;
-      text-align: center;
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      opacity: 0.5;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div>
-      <div class="logo">STEALTH</div>
-      <div class="tagline">Commercial kitchens. By the hour. No bullshit.</div>
-      <div class="enter">knock twice</div>
-    </div>
-  </header>
-
-  <section>
-    <h2>Backdoor access only</h2>
-    <p>You won’t find us on Google Maps. You won’t see a sign out front. We open the door when you book. Stainless steel, hoods that actually work, walk-ins that stay cold, and zero corporate vibes.</p>
-    <p>This is the spot chefs whisper about. The one that’s fully licensed, fully equipped, and still feels like you’re getting away with something.</p>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Book by the hour</h3>
-        <p>Pay only for the time you need. No leases, no deposits, no 3-month minimums.</p>
-      </div>
-      <div class="card">
-        <h3>Pro grade everything</h3>
-        <p>Convection, combis, blast chillers, 20-ft hoods. Shit that actually works when you’re slammed.</p>
-      </div>
-      <div class="card">
-        <h3>Zero red tape</h3>
-        <p>Walk in with your knives and an idea. Walk out with product. We handle the permits.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    STEALTH KITCHENS © 2025 — IF YOU KNOW, YOU KNOW
-  </footer>
-
 </body>
 </html>
