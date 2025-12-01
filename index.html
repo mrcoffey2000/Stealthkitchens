@@ -1,91 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stealth Kitchens</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Awesome App v2.0</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0a0a0a;
-      --text: #e8e8e8;
-      --accent: #ff1e56;
-      --steel: #2a2a2a;
-      --darksteel: #1a1a1a;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    header {
-      height: 100vh;
-      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1556912167-f556f1f39fdf?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=2400') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-    }
-    .logo {
-      font-size: 5rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      color: transparent;
-      -webkit-text-stroke: 1.5px var(--accent);
-      text-stroke: 1.5px var(--accent);
-      text-shadow: 0 0 40px rgba(255,30,86,0.4);
-    }
-    .tagline {
-      margin-top: 2rem;
-      font-size: 1.4rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      opacity: 0.7;
-    }
-    .enter {
-      position: absolute;
-      bottom: 8vh;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.9rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      opacity: 0.6;
-      animation: pulse 3s infinite;
-    }
-    @keyframes pulse { 0%,100% { opacity:0.4 } 50% { opacity:0.8 } }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .slide-in { animation: slideIn 0.6s ease-out; }
+    @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  </style>
+</head>
+<body class="min-h-screen transition-colors duration-500 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
-    section {
-      padding: 12vh 8vw;
-      max-width: 1400px;
-      margin: 0 auto;
+  <!-- Dark Mode Toggle -->
+  <div class="fixed top-4 right-4 z-50">
+    <button id="theme-toggle" class="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition">
+      <i class="fas fa-moon text-xl dark:hidden"></i>
+      <i class="fas fa-sun text-xl hidden dark:inline"></i>
+    </button>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="gradient-bg text-white py-20 px-6 text-center">
+    <div class="max-w-4xl mx-auto slide-in">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to the Future</h1>
+      <p class="text-xl md:text-2xl opacity-90">Blazing fast • Beautiful • Yours</p>
+      <button class="mt-8 px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transform hover:scale-105 transition">
+        Get Started Free
+      </button>
+    </div>
+  </header>
+
+  <!-- Features -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+      <!--[Feature Cards x3] -->
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in">
+        <i class="fas fa-rocket text-5xl text-purple-600 mb-4"></i>
+        <h3 class="text-2xl font-bold mb-3">Lightning Fast</h3>
+        <p class="text-gray-600 dark:text-gray-300">Optimized performance that loads in the blink of an eye.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in" style="animation-delay: 0.2s;">
+        <i class="fas fa-shield-alt text-5xl text-purple-600 mb-4"></i>
+        <h3 class="text-2xl font-bold mb-3">Secure by Default</h3>
+        <p class="text-gray-600 dark:text-gray-300">Enterprise-grade encryption and privacy built in.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in" style="animation-delay: 0.4s;">
+        <i class="fas fa-infinity text-5xl text-purple-600 mb-4"></i>
+        <h3 class="text-2xl font-bold mb-3">Infinitely Scalable</h3>
+        <p class="text-gray-600 dark:text-gray-300">From one user to a million — we’ve got you covered.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Dark mode toggle
+    const toggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Respect system preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
     }
-    h2 {
-      font-size: 3.5rem;
-      font-weight: 900;
-      margin-bottom: 3rem;
-      color: var(--accent);
-    }
-    p {
-      font-size: 1.3rem;
-      max-width: 800px;
-      margin: 2rem auto;
-      opacity: 0.9;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 3rem;
-      margin-top: 6rem;
-    }
-    .card {
-      background: var(--darksteel);
-      padding: 3rem 2rem;
-      border: 1px solid #333;
-      transition: all 0.4s ease;
+  </script>
+</body>
+</html>
+
+.4s ease;
     }
     .card:hover {
       border-color: var(--accent);
