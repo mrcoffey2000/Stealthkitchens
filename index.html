@@ -2,82 +2,135 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Awesome App v2.0</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    }
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stealth Kitchens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .slide-in { animation: slideIn 0.6s ease-out; }
-    @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .logo-fade { animation: fadeInLogo 1s ease-out; }
-    @keyframes fadeInLogo { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Logo – always visible, top-center */
+    .logo {
+      position: absolute;
+      top: 5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(140px, 28vw, 320px);
+      height: auto;
+      opacity: 0.9;
+      z-index: 10;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 10vw;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(2.2rem, 9vw, 5.5rem);
+      font-weight: 200;
+      line-height: 1.25;
+      letter-spacing: 0.04em;
+      white-space: pre-line;
+    }
+
+    .slide.active { opacity: 1; }
+
+    .cta {
+      margin-top: 4rem;
+      padding: 1rem 3rem;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 9999px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+    .cta:hover { background: #eee; }
+
+    .footer {
+      position: absolute;
+      bottom: 2rem;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .footer a {
+      color: #666;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s;
+    }
+    .footer a:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
   </style>
 </head>
-<body class="min-h-screen transition-colors duration-500 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body>
 
-  <!-- Dark Mode Toggle -->
-  <div class="fixed top-4 right-4 z-50">
-    <button id="theme-toggle" class="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition">
-      <i class="fas fa-moon text-xl dark:hidden"></i>
-      <i class="fas fa-sun text-xl hidden dark:inline"></i>
-    </button>
+  <!-- Logo on every slide -->
+  <img src="https://i.ibb.co/yBp6vDNL/1764591736338.png" alt="Stealth Kitchens" class="logo">
+
+  <div class="carousel">
+    <div class="slide active">Tired of getting\nfucked by\nghost kitchens?</div>
+    <div class="slide">Introducing\nStealth Kitchens</div>
+    <div class="slide">Book.\nCook.\nDone.</div>
   </div>
 
-  <!-- Hero Section -->
-  <header class="gradient-bg text-white py-20 px-6 text-center">
-    <div class="max-w-4xl mx-auto slide-in">
-      <!-- New Logo Implementation -->
-      <img src="grok-image-ns68dt.jpg" alt="Awesome App Logo" class="mx-auto w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 logo-fade mb-6">
-      <p class="text-xl md:text-2xl opacity-90">Blazing fast • Beautiful • Yours</p>
-      <button class="mt-8 px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transform hover:scale-105 transition">
-        Get Started Free
-      </button>
-    </div>
-  </header>
+  <!-- Change href to your real waitlist / form -->
+  <a href="https://tally.so/r/w8R9oK" class="cta" target="_blank">GET EARLY ACCESS</a>
 
-  <!-- Features -->
-  <section class="py-20 px-6">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-      <!--[Feature Cards x3] -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in">
-        <i class="fas fa-rocket text-5xl text-purple-600 mb-4"></i>
-        <h3 class="text-2xl font-bold mb-3">Lightning Fast</h3>
-        <p class="text-gray-600 dark:text-gray-300">Optimized performance that loads in the blink of an eye.</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in" style="animation-delay: 0.2s;">
-        <i class="fas fa-shield-alt text-5xl text-purple-600 mb-4"></i>
-        <h3 class="text-2xl font-bold mb-3">Secure by Default</h3>
-        <p class="text-gray-600 dark:text-gray-300">Enterprise-grade encryption and privacy built in.</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition slide-in" style="animation-delay: 0.4s;">
-        <i class="fas fa-infinity text-5xl text-purple-600 mb-4"></i>
-        <h3 class="text-2xl font-bold mb-3">Infinitely Scalable</h3>
-        <p class="text-gray-600 dark:text-gray-300">From one user to a million — we’ve got you covered.</p>
-      </div>
-    </div>
-  </section>
+  <div class="footer">
+    <a href="/privacy.html">Privacy policy – tap to view</a>
+  </div>
 
   <script>
-    // Dark mode toggle
-    const toggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
 
-    toggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-    });
-
-    // Respect system preference
-    if (localStorage.getItem('theme') === 'dark' || 
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
+    function nextSlide() {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
     }
+
+    // Auto-rotate every 5 seconds
+    setInterval(nextSlide, 5000);
+
+    // Optional: restart timer on click/tap so it feels intentional
+    document.addEventListener('click', () => {
+      clearInterval(window.stealthInterval);
+      nextSlide();
+      window.stealthInterval = setInterval(nextSlide, 5000);
+    });
   </script>
 </body>
 </html>
