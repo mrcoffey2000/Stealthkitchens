@@ -1,12 +1,223 @@
-Your typography is now updated to a thick, serif, editorial, wide-spaced look across the homepage and hero section.
+import React, { useState, useEffect } from 'react';
 
-If you want me to:
+export default function StealthKitchensHome() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-convert the hero back into a fully functional 3-slide autoplay carousel,
+  const slides = [
+    {
+      id: 1,
+      image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1920&q=80',
+      heading: 'TIRED OF GETTING FUCKED BY GHOST KITCHENS?',
+      subheading: 'We built the antidote.',
+      textStyle: 'playfair'
+    },
+    {
+      id: 2,
+      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb4c?w=1920&q=80',
+      heading: 'REAL KITCHENS. REAL COOKS. REAL BUSINESS.',
+      subheading: 'No gimmicks. No fake brands. Just profit.',
+      textStyle: 'bodoni'
+    },
+    {
+      id: 3,
+      image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80',
+      heading: 'PREMIUM EQUIPMENT. OFF-PEAK HOURS. YOUR SUCCESS.',
+      subheading: 'The marketplace for serious food entrepreneurs.',
+      textStyle: 'cormorant'
+    }
+  ];
 
-add per-slide typography variations,
+  useEffect(() => {
+    if (!isHovered) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 6000);
+      return () => clearInterval(timer);
+    }
+  }, [isHovered, slides.length]);
 
-or switch to a high-fashion Vogue-style serif system,
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
+  const getTypographyClass = (style) => {
+    const baseClasses = 'text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-wide';
+    switch(style) {
+      case 'playfair':
+        return `${baseClasses} font-serif italic`;
+      case 'bodoni':
+        return `${baseClasses} font-serif tracking-widest`;
+      case 'cormorant':
+        return `${baseClasses} font-serif font-light tracking-[0.15em]`;
+      default:
+        return baseClasses;
+    }
+  };
 
-just say “carousel version” and I’ll retrofit the entire file cleanly.
+  return (
+    <div className="bg-black text-white min-h-screen font-serif">
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center py-8 px-10 md:px-16 bg-black/40 backdrop-blur-md border-b border-white/10">
+        <h1 className="text-base md:text-lg font-light tracking-[0.3em] uppercase">The Stealth Kitchens Project</h1>
+        <nav className="hidden md:flex space-x-12 uppercase text-xs tracking-[0.25em] font-light">
+          <a href="#about" className="hover:opacity-60 transition-opacity duration-300">About</a>
+          <a href="#how" className="hover:opacity-60 transition-opacity duration-300">How It Works</a>
+          <a href="#market" className="hover:opacity-60 transition-opacity duration-300">Marketplace</a>
+          <a href="#apply" className="hover:opacity-60 transition-opacity duration-300">Apply</a>
+        </nav>
+        <button className="md:hidden text-xs tracking-widest">MENU</button>
+      </header>
+
+      {/* Hero Carousel */}
+      <section 
+        className="relative h-screen w-full overflow-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-1500 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${slide.image})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+            
+            <div className="absolute inset-0 flex flex-col justify-center items-start px-10 md:px-20 lg:px-32 space-y-8">
+              <h2 className={getTypographyClass(slide.textStyle) + " max-w-6xl animate-fade-in-up"}>
+                {slide.heading}
+              </h2>
+              <p className="text-xl md:text-2xl lg:text-3xl opacity-90 tracking-[0.15em] font-light max-w-2xl animate-fade-in-up animation-delay-300">
+                {slide.subheading}
+              </p>
+              <button className="mt-8 px-10 py-4 border border-white/40 hover:bg-white hover:text-black transition-all duration-500 tracking-[0.2em] text-xs uppercase font-light animate-fade-in-up animation-delay-600">
+                Explore Now
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {/* Carousel Indicators */}
+        <div className="absolute bottom-12 left-10 md:left-20 lg:left-32 flex space-x-4 z-20">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`h-0.5 transition-all duration-500 ${
+                index === currentSlide 
+                  ? 'w-16 bg-white' 
+                  : 'w-8 bg-white/40 hover:bg-white/70'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Slide Counter */}
+        <div className="absolute bottom-12 right-10 md:right-20 lg:right-32 text-sm tracking-[0.3em] font-light opacity-60">
+          {String(currentSlide + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+        </div>
+      </section>
+
+      {/* Mission Section */}
+      <section id="about" className="px-10 md:px-20 lg:px-32 py-32 md:py-48 space-y-12 border-t border-white/10">
+        <h2 className="text-4xl md:text-6xl font-light tracking-[0.1em] max-w-5xl leading-tight">
+          WE'RE NOT A GHOST KITCHEN COMPANY. <span className="italic">WE'RE THE OPPOSITE.</span>
+        </h2>
+        <p className="text-lg md:text-xl max-w-4xl opacity-80 leading-relaxed tracking-wide font-light">
+          We pair real donut shops and bakeries with real cooks who need premium
+          equipment during off-hours. No gimmicks. No fake brands. Just
+          entrepreneurs helping entrepreneurs. Simple. Efficient. Elegant.
+        </p>
+      </section>
+
+      {/* How It Works */}
+      <section id="how" className="px-10 md:px-20 lg:px-32 py-32 md:py-48 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-20 border-t border-white/10">
+        <div className="space-y-6">
+          <h3 className="text-3xl md:text-4xl font-light tracking-[0.15em]">BOOK</h3>
+          <div className="w-12 h-px bg-white/30" />
+          <p className="opacity-80 leading-relaxed tracking-wide text-base font-light">
+            Find a kitchen with dormant hours. Click. Reserve. Done.
+          </p>
+        </div>
+        <div className="space-y-6">
+          <h3 className="text-3xl md:text-4xl font-light tracking-[0.15em]">COOK</h3>
+          <div className="w-12 h-px bg-white/30" />
+          <p className="opacity-80 leading-relaxed tracking-wide text-base font-light">
+            Walk into a real, clean, equipped kitchen. Use it like it's yours.
+          </p>
+        </div>
+        <div className="space-y-6">
+          <h3 className="text-3xl md:text-4xl font-light tracking-[0.15em]">PROFIT</h3>
+          <div className="w-12 h-px bg-white/30" />
+          <p className="opacity-80 leading-relaxed tracking-wide text-base font-light">
+            Vendors earn more. Shops earn more. Everyone wins.
+          </p>
+        </div>
+      </section>
+
+      {/* Marketplace Placeholder */}
+      <section id="market" className="px-10 md:px-20 lg:px-32 py-32 md:py-48 border-t border-white/10">
+        <h2 className="text-4xl md:text-5xl font-light mb-16 tracking-[0.15em]">Marketplace</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="aspect-[4/5] bg-white/5 border border-white/10 hover:border-white/30 transition-all duration-500 group">
+              <div className="p-8 h-full flex flex-col justify-end">
+                <p className="text-xs tracking-[0.3em] opacity-60 mb-2">LOCATION {i}</p>
+                <p className="text-sm opacity-40 tracking-wide font-light">Available soon</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-10 md:px-20 lg:px-32 py-12 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs tracking-[0.25em] opacity-60 space-y-6 md:space-y-0 font-light">
+        <span>© {new Date().getFullYear()} STEALTH KITCHENS PROJECT</span>
+        <div className="flex space-x-12">
+          <a href="#" className="hover:opacity-100 transition-opacity">ABOUT</a>
+          <a href="#" className="hover:opacity-100 transition-opacity">CONTACT</a>
+          <a href="#" className="hover:opacity-100 transition-opacity">PRIVACY</a>
+        </div>
+      </footer>
+
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:wght@300;400;700&display=swap');
+        
+        body {
+          font-family: 'Cormorant Garamond', serif;
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animation-delay-300 {
+          animation-delay: 0.3s;
+          opacity: 0;
+        }
+
+        .animation-delay-600 {
+          animation-delay: 0.6s;
+          opacity: 0;
+        }
+      `}</style>
+    </div>
+  );
+}
