@@ -1,135 +1,275 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Crystal Method</title>
-<style>
-/* Base reset */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; font-family: 'Helvetica Neue', sans-serif; color: white; background: black; }
+"use client";
 
-body.noir { background: #000; position: relative; overflow: hidden; }
+import React, { useState } from "react";
 
-/* White slash */
-#slash { position: absolute; top:0; bottom:0; left:50%; width:8px; background:white; transform:translateX(-50%); z-index:1; }
-
-/* Hero */
-#hero { position: relative; z-index:2; text-align:center; padding:60px 20px 40px; }
-#hero h1 { font-size:3rem; letter-spacing:2px; }
-#hero h2 { font-family: Courier, monospace; font-size:1rem; margin-top:1rem; opacity:0.8; }
-#hero p { margin-top:1rem; opacity:0.6; }
-#user-input { margin-top:20px; padding:8px 12px; font-size:1rem; width:60%; max-width:400px; }
-#ask-btn { margin-left:8px; padding:8px 12px; font-size:1rem; cursor:pointer; }
-
-/* Orchard / fruits */
-#orchard { display:flex; justify-content:center; gap:40px; padding:40px 0; flex-wrap:wrap; position:relative; z-index:2; }
-.fruit { width:80px; height:80px; cursor:pointer; transition: transform 0.2s; }
-.fruit:hover { transform:scale(1.1); }
-
-/* Result */
-#result { margin-top:40px; text-align:center; padding:20px; min-height:60px; z-index:2; }
-#response-text { font-size:1.4rem; font-family:Courier, monospace; white-space:pre-wrap; }
-
-/* Teal flash */
-@keyframes teal-flash { 0%{background:transparent;} 50%{background:rgba(0,255,215,0.3);} 100%{background:transparent;} }
-.flash { animation: teal-flash 0.4s ease-out; }
-
-/* Brutal Mode toggle */
-.brutal-easter { font-family:Courier; font-size:0.8rem; text-align:center; cursor:pointer; opacity:0.3; margin-top:20px; }
-.brutal-active { color:#0ff; font-weight:bold; opacity:1; }
-</style>
-</head>
-<body class="noir">
-<div id="slash"></div>
-
-<div id="hero">
-<h1>The Crystal Method</h1>
-<h2>Feed me something real — your odds, your roast, your truth.</h2>
-<p>Click a fruit or type your query below.</p>
-<input type="text" id="user-input" placeholder="Ask me something..." />
-<button id="ask-btn">Calculate</button>
-</div>
-
-<div id="orchard">
-<img src="assets/fruit-apple.svg" class="fruit" data-question="job" alt="Job Fruit">
-<img src="assets/fruit-pear.svg" class="fruit" data-question="lottery" alt="Lottery Fruit">
-<img src="assets/fruit-orange.svg" class="fruit" data-question="life" alt="Life Fruit">
-</div>
-
-<div id="result">
-<p id="response-text"></p>
-</div>
-
-<p id="brutal-toggle" class="brutal-easter">abandon hope?</p>
-
-<script>
-const fruitEls = document.querySelectorAll('.fruit');
-const responseEl = document.getElementById('response-text');
-const userInput = document.getElementById('user-input');
-const askBtn = document.getElementById('ask-btn');
-const brutalToggle = document.getElementById('brutal-toggle');
-
-let brutalMode = false;
-
-const responses = {
-  job: ["Twenty‑one percent.\nStop saying 'synergy.' Shower.", "Forty percent.\nTrade buzzwords for ambition."],
-  lottery: ["One in two hundred ninety‑four million.\nCongrats, life wasted."],
-  life: ["Depends on coffee intake.\nStart with one cup."],
-  ex: ["Nine percent. Stop stalking, then zero."],
-  default: ["Zero percent. Next."]
-};
-
-const brutalResponses = [
-  "Your question is absurd. Think harder.",
-  "Even math weeps at this query."
+const randomScenarios = [
+  "What are the odds I bust this blackjack hand?",
+  "Will Bambi actually go out with me?",
+  "What are the chances I make it as a recording artist?",
+  "What are the odds I go pro in my sport?",
+  "What are the chances my startup doesn’t implode?"
 ];
 
-function showResponse(text){
-  responseEl.textContent = text;
-  responseEl.classList.remove('flash');
-  void responseEl.offsetWidth;
-  responseEl.classList.add('flash');
-  // Placeholder for British voice: e.g., new Audio('voices/job.mp3').play();
-}
+function fakeProbabilityEngine(question: string) {
+  const base = Math.random();
+  const skew =
+    question.toLowerCase().includes("blackjack") ||
+    question.toLowerCase().includes("casino")
+      ? 0.3
+      : question.toLowerCase().includes("go pro") ||
+        question.toLowerCase().includes("recording artist")
+      ? -0.2
+      : 0;
 
-// Fruit click
-fruitEls.forEach(el=>{
-  el.addEventListener('click', ()=>{
-    const key = el.dataset.question;
-    let pool = brutalMode ? brutalResponses : (responses[key] || responses.default);
-    const resp = pool[Math.floor(Math.random()*pool.length)];
-    showResponse(resp);
-  });
-});
+  let prob = base + skew;
+  prob = Math.max(0.01, Math.min(0.99, prob));
 
-// Input query
-askBtn.addEventListener('click', ()=>{
-  const query = userInput.value.toLowerCase();
-  let resp = responses.default[0];
+  const percent = Math.round(prob * 100);
 
-  if(brutalMode){
-    resp = brutalResponses[Math.floor(Math.random()*brutalResponses.length)];
-  } else if(query.includes('job')){
-    resp = responses.job[Math.floor(Math.random()*responses.job.length)];
-  } else if(query.includes('lottery')){
-    resp = responses.lottery[0];
-  } else if(query.includes('pass') || query.includes('study')){
-    resp = "Ninety-seven percent. Wow, Sherlock. Shocking.";
-  } else if(query.includes('ex')){
-    resp = responses.ex[0];
-  } else if(query.includes('life')){
-    resp = responses.life[0];
+  let tone: "roast" | "neutral" | "soft" = "neutral";
+  if (percent < 25) tone = "roast";
+  else if (percent > 70) tone = "soft";
+
+  let line = "";
+
+  if (tone === "roast") {
+    line =
+      "In purely statistical terms, that’s what one might call ‘adorably optimistic’.";
+  } else if (tone === "soft") {
+    line =
+      "Surprisingly solid. Try not to sabotage it with your usual decision-making.";
+  } else {
+    line =
+      "Could go either way. Like your life choices, frankly.";
   }
 
-  showResponse(resp);
-});
+  const intro =
+    tone === "roast"
+      ? "Right, brace yourself."
+      : tone === "soft"
+      ? "Not dreadful news for once."
+      : "Here’s the honest read.";
 
-// Brutal Mode toggle
-brutalToggle.addEventListener('click', ()=>{
-  brutalMode = !brutalMode;
-  brutalToggle.classList.toggle('brutal-active', brutalMode);
-});
-</script>
-</body>
-  </html>
+  return { percent, intro, line };
+}
+
+export default function Home() {
+  const [question, setQuestion] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
+  const [result, setResult] = useState<null | {
+    percent: number;
+    intro: string;
+    line: string;
+  }>(null);
+
+  const handleAsk = (q?: string) => {
+    const finalQ = (q ?? question).trim();
+    if (!finalQ) return;
+    setIsThinking(true);
+    setResult(null);
+
+    setTimeout(() => {
+      const r = fakeProbabilityEngine(finalQ);
+      setResult(r);
+      setIsThinking(false);
+    }, 900);
+  };
+
+  const handleRandom = () => {
+    const q =
+      randomScenarios[Math.floor(Math.random() * randomScenarios.length)];
+    setQuestion(q);
+    handleAsk(q);
+  };
+
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top, #3b1d7a 0, #12041f 45%, #050008 100%)",
+        color: "#fdf9ff",
+        display: "flex",
+        flexDirection: "column",
+        padding: "16px",
+        fontFamily:
+          "-apple-system, BlinkMacSystemFont, system-ui, -system-ui, sans-serif"
+      }}
+    >
+      <div style={{ maxWidth: 500, margin: "0 auto", width: "100%" }}>
+        {/* Header */}
+        <header style={{ paddingTop: 28, paddingBottom: 16 }}>
+          <div
+            style={{
+              fontSize: 16,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              opacity: 0.7
+            }}
+          >
+            Low‑Hanging Futures
+          </div>
+          <h1
+            style={{
+              marginTop: 10,
+              fontSize: 30,
+              lineHeight: 1.15,
+              fontWeight: 700
+            }}
+          >
+            The British Roast Probability Engine.
+          </h1>
+          <p
+            style={{
+              marginTop: 10,
+              fontSize: 14,
+              opacity: 0.85
+            }}
+          >
+            Ask anything. A cynical Cambridge brain runs the numbers and tells
+            you how ripe your odds are.
+          </p>
+        </header>
+
+        {/* Input card */}
+        <section
+          style={{
+            marginTop: 8,
+            padding: 18,
+            borderRadius: 22,
+            background:
+              "linear-gradient(145deg, rgba(118,54,215,0.3), rgba(255,177,66,0.16))",
+            border: "1px solid rgba(255,255,255,0.1)",
+            backdropFilter: "blur(18px)",
+            boxShadow:
+              "0 22px 50px rgba(0,0,0,0.7), 0 0 80px rgba(255,177,66,0.14) inset"
+          }}
+        >
+          <label
+            style={{
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: "0.16em",
+              opacity: 0.8
+            }}
+          >
+            Your question
+          </label>
+          <textarea
+            rows={3}
+            placeholder="What are the odds I bust this blackjack hand?"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            style={{
+              marginTop: 8,
+              width: "100%",
+              borderRadius: 16,
+              border: "1px solid rgba(255,255,255,0.18)",
+              padding: "10px 12px",
+              fontSize: 15,
+              resize: "none",
+              background: "rgba(7,3,18,0.95)",
+              color: "#fdf9ff",
+              outline: "none",
+              boxShadow: "0 0 0 1px rgba(0,0,0,0.3)"
+            }}
+          />
+
+          {/* Low-hanging fruit chips */}
+          <div
+            style={{
+              marginTop: 10,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8
+            }}
+          >
+            {randomScenarios.slice(0, 3).map((s, idx) => {
+              const fruitColors = [
+                "linear-gradient(135deg,#ffba3a,#ffd86f)",
+                "linear-gradient(135deg,#ff5656,#ff9147)",
+                "linear-gradient(135deg,#7d4bff,#ff6fd8)"
+              ];
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => {
+                    setQuestion(s);
+                    handleAsk(s);
+                  }}
+                  style={{
+                    borderRadius: 999,
+                    border: "1px solid rgba(10,0,30,0.7)",
+                    background: "rgba(6,0,15,0.9)",
+                    color: "#fdf9ff",
+                    padding: "6px 10px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: "50%",
+                      background: fruitColors[idx],
+                      boxShadow:
+                        "0 0 0 1px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.2)"
+                    }}
+                  />
+                  <span>{s}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Actions */}
+          <div
+            style={{
+              marginTop: 16,
+              display: "flex",
+              alignItems: "center",
+              gap: 10
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => handleAsk()}
+              disabled={isThinking || !question.trim()}
+              style={{
+                flex: 1,
+                height: 50,
+                borderRadius: 999,
+                border: "none",
+                cursor: isThinking || !question.trim() ? "default" : "pointer",
+                background:
+                  "conic-gradient(from 190deg, #ffb52e, #ff6b3d, #ff4b9b, #7c3dff, #ffb52e)",
+                color: "#120017",
+                fontSize: 16,
+                fontWeight: 650,
+                boxShadow: isThinking
+                  ? "0 0 0 0 rgba(255,181,46,0.0)"
+                  : "0 12px 28px rgba(0,0,0,0.75)",
+                opacity: isThinking || !question.trim() ? 0.6 : 1,
+                transition:
+                  "transform 0.12s ease-out, box-shadow 0.12s ease-out"
+              }}
+            >
+              {isThinking ? "Running the numbers..." : "Give me the odds"}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRandom}
+              disabled={isThinking}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.22)",
+                background:
+                  "radial-gradient
