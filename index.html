@@ -1,275 +1,60 @@
-"use client";
-
-import React, { useState } from "react";
-
-const randomScenarios = [
-  "What are the odds I bust this blackjack hand?",
-  "Will Bambi actually go out with me?",
-  "What are the chances I make it as a recording artist?",
-  "What are the odds I go pro in my sport?",
-  "What are the chances my startup doesn’t implode?"
-];
-
-function fakeProbabilityEngine(question: string) {
-  const base = Math.random();
-  const skew =
-    question.toLowerCase().includes("blackjack") ||
-    question.toLowerCase().includes("casino")
-      ? 0.3
-      : question.toLowerCase().includes("go pro") ||
-        question.toLowerCase().includes("recording artist")
-      ? -0.2
-      : 0;
-
-  let prob = base + skew;
-  prob = Math.max(0.01, Math.min(0.99, prob));
-
-  const percent = Math.round(prob * 100);
-
-  let tone: "roast" | "neutral" | "soft" = "neutral";
-  if (percent < 25) tone = "roast";
-  else if (percent > 70) tone = "soft";
-
-  let line = "";
-
-  if (tone === "roast") {
-    line =
-      "In purely statistical terms, that’s what one might call ‘adorably optimistic’.";
-  } else if (tone === "soft") {
-    line =
-      "Surprisingly solid. Try not to sabotage it with your usual decision-making.";
-  } else {
-    line =
-      "Could go either way. Like your life choices, frankly.";
-  }
-
-  const intro =
-    tone === "roast"
-      ? "Right, brace yourself."
-      : tone === "soft"
-      ? "Not dreadful news for once."
-      : "Here’s the honest read.";
-
-  return { percent, intro, line };
-}
+npx create-next-app@latest stealth-kitchens --ts --tailwind --app --src-dir --eslint --import-alias="@/*" --yes && cd stealth-kitchens && cat > src/app/page.tsx << 'EOF'
+'use client';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [question, setQuestion] = useState("");
-  const [isThinking, setIsThinking] = useState(false);
-  const [result, setResult] = useState<null | {
-    percent: number;
-    intro: string;
-    line: string;
-  }>(null);
+  const [i, setI] = useState(0);
+  const slides = [
+    { main: "Tired of getting fucked", sub: "by ghost kitchens?" },
+    { main: "Introducing The", sub: "Stealth Kitchens" },
+    { main: "Coming 2026", sub: "Invisible luxury. Zero noise." },
+  ];
 
-  const handleAsk = (q?: string) => {
-    const finalQ = (q ?? question).trim();
-    if (!finalQ) return;
-    setIsThinking(true);
-    setResult(null);
-
-    setTimeout(() => {
-      const r = fakeProbabilityEngine(finalQ);
-      setResult(r);
-      setIsThinking(false);
-    }, 900);
-  };
-
-  const handleRandom = () => {
-    const q =
-      randomScenarios[Math.floor(Math.random() * randomScenarios.length)];
-    setQuestion(q);
-    handleAsk(q);
-  };
+  useEffect(() => {
+    const t = setInterval(() => setI(x => (x + 1) % 3), 4200);
+    return () => clearInterval(t);
+  }, []);
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background:
-          "radial-gradient(circle at top, #3b1d7a 0, #12041f 45%, #050008 100%)",
-        color: "#fdf9ff",
-        display: "flex",
-        flexDirection: "column",
-        padding: "16px",
-        fontFamily:
-          "-apple-system, BlinkMacSystemFont, system-ui, -system-ui, sans-serif"
-      }}
-    >
-      <div style={{ maxWidth: 500, margin: "0 auto", width: "100%" }}>
-        {/* Header */}
-        <header style={{ paddingTop: 28, paddingBottom: 16 }}>
-          <div
-            style={{
-              fontSize: 16,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              opacity: 0.7
-            }}
-          >
-            Low‑Hanging Futures
+    <>
+      <style jsx global>{`
+        :root { --e:cubic-bezier(.19,1,.22,1); --s:cubic-bezier(.2,.9,.3,1.3); }
+        @keyframes up { from {opacity:0;transform:translateY(80px)} to {opacity:1;transform:translateY(0)} }
+        .r > * {opacity:0;animation:up 1.4s var(--e) forwards}
+        .r.a > *:nth-child(1){animation-delay:.25s}
+        .r.a > *:nth-child(2){animation-delay:.45s}
+        .d{transition:all .8s var(--s)}
+      `}</style>
+
+      <main className="relative min-h-screen bg-black text-white overflow-hidden">
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50">
+          <Image src="/logo.png" alt="Stealth Kitchens" width={240} height={90} priority className="h-12 md:h-16 w-auto" />
+        </div>
+
+        {slides.map((s,x) => (
+          <div key={x} className="absolute inset-0 flex flex-col items-center justify-center text-center px-8" style={{opacity:x===i?1:0,transition:'opacity 1.2s var(--e)'}}>
+            <div className={`r ${x===i?'a':''}`}>
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-thin tracking-tighter leading-none">{s.main}</h1>
+              <p className="mt-8 text-2xl md:text-4xl font-light text-gray-400">{s.sub}</p>
+            </div>
           </div>
-          <h1
-            style={{
-              marginTop: 10,
-              fontSize: 30,
-              lineHeight: 1.15,
-              fontWeight: 700
-            }}
-          >
-            The British Roast Probability Engine.
-          </h1>
-          <p
-            style={{
-              marginTop: 10,
-              fontSize: 14,
-              opacity: 0.85
-            }}
-          >
-            Ask anything. A cynical Cambridge brain runs the numbers and tells
-            you how ripe your odds are.
-          </p>
-        </header>
+        ))}
 
-        {/* Input card */}
-        <section
-          style={{
-            marginTop: 8,
-            padding: 18,
-            borderRadius: 22,
-            background:
-              "linear-gradient(145deg, rgba(118,54,215,0.3), rgba(255,177,66,0.16))",
-            border: "1px solid rgba(255,255,255,0.1)",
-            backdropFilter: "blur(18px)",
-            boxShadow:
-              "0 22px 50px rgba(0,0,0,0.7), 0 0 80px rgba(255,177,66,0.14) inset"
-          }}
-        >
-          <label
-            style={{
-              fontSize: 12,
-              textTransform: "uppercase",
-              letterSpacing: "0.16em",
-              opacity: 0.8
-            }}
-          >
-            Your question
-          </label>
-          <textarea
-            rows={3}
-            placeholder="What are the odds I bust this blackjack hand?"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            style={{
-              marginTop: 8,
-              width: "100%",
-              borderRadius: 16,
-              border: "1px solid rgba(255,255,255,0.18)",
-              padding: "10px 12px",
-              fontSize: 15,
-              resize: "none",
-              background: "rgba(7,3,18,0.95)",
-              color: "#fdf9ff",
-              outline: "none",
-              boxShadow: "0 0 0 1px rgba(0,0,0,0.3)"
-            }}
-          />
+        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex gap-4">
+          {[0,1,2].map(n => (
+            <button key={n} onClick={()=>setI(n)} className={`d h-1.5 rounded-full ${n===i?'bg-white w-14':'bg-gray-700 w-1.5'}`} />
+          ))}
+        </div>
+      </main>
+    </>
+  );
+}
+EOF
 
-          {/* Low-hanging fruit chips */}
-          <div
-            style={{
-              marginTop: 10,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 8
-            }}
-          >
-            {randomScenarios.slice(0, 3).map((s, idx) => {
-              const fruitColors = [
-                "linear-gradient(135deg,#ffba3a,#ffd86f)",
-                "linear-gradient(135deg,#ff5656,#ff9147)",
-                "linear-gradient(135deg,#7d4bff,#ff6fd8)"
-              ];
-              return (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => {
-                    setQuestion(s);
-                    handleAsk(s);
-                  }}
-                  style={{
-                    borderRadius: 999,
-                    border: "1px solid rgba(10,0,30,0.7)",
-                    background: "rgba(6,0,15,0.9)",
-                    color: "#fdf9ff",
-                    padding: "6px 10px",
-                    fontSize: 12,
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 16,
-                      height: 16,
-                      borderRadius: "50%",
-                      background: fruitColors[idx],
-                      boxShadow:
-                        "0 0 0 1px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.2)"
-                    }}
-                  />
-                  <span>{s}</span>
-                </button>
-              );
-            })}
-          </div>
+# Drop your logo here
+curl -L https://via.placeholder.com/240x90/ffffff/000000.png?text=STEALTH → public/logo.png
 
-          {/* Actions */}
-          <div
-            style={{
-              marginTop: 16,
-              display: "flex",
-              alignItems: "center",
-              gap: 10
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => handleAsk()}
-              disabled={isThinking || !question.trim()}
-              style={{
-                flex: 1,
-                height: 50,
-                borderRadius: 999,
-                border: "none",
-                cursor: isThinking || !question.trim() ? "default" : "pointer",
-                background:
-                  "conic-gradient(from 190deg, #ffb52e, #ff6b3d, #ff4b9b, #7c3dff, #ffb52e)",
-                color: "#120017",
-                fontSize: 16,
-                fontWeight: 650,
-                boxShadow: isThinking
-                  ? "0 0 0 0 rgba(255,181,46,0.0)"
-                  : "0 12px 28px rgba(0,0,0,0.75)",
-                opacity: isThinking || !question.trim() ? 0.6 : 1,
-                transition:
-                  "transform 0.12s ease-out, box-shadow 0.12s ease-out"
-              }}
-            >
-              {isThinking ? "Running the numbers..." : "Give me the odds"}
-            </button>
+git add . && git commit -m "version 0 live" && git push
 
-            <button
-              type="button"
-              onClick={handleRandom}
-              disabled={isThinking}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.22)",
-                background:
-                  "radial-gradient
+echo "Push finished → go to vercel.com → import this repo → LIVE in 15 seconds"
