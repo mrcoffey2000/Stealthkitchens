@@ -1,51 +1,52 @@
 'use client';
-import Image from 'next/image';
+
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [i, setI] = useState(0);
+
   const slides = [
-    { main: "Tired of getting fucked", sub: "by ghost kitchens?" },
-    { main: "Introducing The", sub: "Stealth Kitchens" },
-    { main: "Coming 2026", sub: "Invisible luxury. Zero noise." },
+    { main: 'Tired of getting fucked', sub: 'by ghost kitchens?' },
+    { main: 'Introducing The', sub: 'Stealth Kitchens' },
+    { main: 'Coming 2026', sub: 'Invisible luxury. Zero noise.' },
   ];
 
   useEffect(() => {
-    const t = setInterval(() => setI(x => (x + 1) % 3), 4200);
+    const t = setInterval(() => setI((x) => (x + 1) % slides.length), 4200);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <>
-      <style jsx global>{`
-        :root { --e:cubic-bezier(.19,1,.22,1); --s:cubic-bezier(.2,.9,.3,1.3); }
-        @keyframes up { from {opacity:0;transform:translateY(80px)} to {opacity:1;transform:translateY(0)} }
-        .r > * {opacity:0;animation:up 1.4s var(--e) forwards}
-        .r.a > *:nth-child(1){animation-delay:.25s}
-        .r.a > *:nth-child(2){animation-delay:.45s}
-        .d{transition:all .8s var(--s)}
-      `}</style>
+    <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+      <h1 className="mb-8 text-3xl font-bold">Stealth Kitchens</h1>
 
-      <main className="relative min-h-screen bg-black text-white overflow-hidden">
-        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50">
-          <Image src="/logo.png" alt="Stealth Kitchens" width={240} height={90} priority className="h-12 md:h-16 w-auto" />
-        </div>
-
-        {slides.map((s,x) => (
-          <div key={x} className="absolute inset-0 flex flex-col items-center justify-center text-center px-8" style={{opacity:x===i?1:0,transition:'opacity 1.2s var(--e)'}}>
-            <div className={`r ${x===i?'a':''}`}>
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-thin tracking-tighter leading-none">{s.main}</h1>
-              <p className="mt-8 text-2xl md:text-4xl font-light text-gray-400">{s.sub}</p>
+      <div className="relative h-32 flex items-center justify-center overflow-hidden">
+        {slides.map((s, x) => (
+          <div
+            key={x}
+            className={`absolute transition-opacity duration-500 ${
+              x === i ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="text-2xl font-semibold text-center">{s.main}</div>
+            <div className="text-lg text-center mt-2 text-gray-300">
+              {s.sub}
             </div>
           </div>
         ))}
+      </div>
 
-        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex gap-4">
-          {[0,1,2].map(n => (
-            <button key={n} onClick={()=>setI(n)} className={`d h-1.5 rounded-full ${n===i?'bg-white w-14':'bg-gray-700 w-1.5'}`} />
-          ))}
-        </div>
-      </main>
-    </>
+      <div className="mt-6 flex gap-2">
+        {[0, 1, 2].map((n) => (
+          <button
+            key={n}
+            onClick={() => setI(n)}
+            className={`h-1.5 rounded-full transition-all ${
+              n === i ? 'bg-white w-14' : 'bg-gray-700 w-1.5'
+            }`}
+          />
+        ))}
+      </div>
+    </main>
   );
 }
