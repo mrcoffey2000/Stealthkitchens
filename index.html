@@ -1,5 +1,4 @@
-npx create-next-app@latest stealth-kitchens --ts --tailwind --app --src-dir --eslint --import-alias="@/*" --yes && cd stealth-kitchens && cat > src/app/page.tsx << 'EOF'
-'use client';
+   'use client';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
@@ -49,12 +48,4 @@ export default function Home() {
       </main>
     </>
   );
-}
-EOF
-
-# Drop your logo here
-curl -L https://via.placeholder.com/240x90/ffffff/000000.png?text=STEALTH → public/logo.png
-
-git add . && git commit -m "version 0 live" && git push
-
-echo "Push finished → go to vercel.com → import this repo → LIVE in 15 seconds"
+}         
